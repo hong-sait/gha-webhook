@@ -16,7 +16,8 @@ if not WEBHOOK_SECRET:
     raise RuntimeError(
         "Environment variable WEBHOOK_SECRET is required but not set. Server will not start for security reasons."
     )
-
+# Load Docker Hub Repository from env or .env file
+REPOSITORY = os.getenv("REPOSITORY", default="hongsait/cpsy-350-ci-python")
 
 app = FastAPI(title="Docker Push Webhook Listener")
 
@@ -54,7 +55,13 @@ def handle_docker_push(payload: WebhookPayload, x_token: str = Header(...)):
         raise HTTPException(status_code=403, detail="Invalid or missing token")
 
     logger.info("🪝 Webhook received and authenticated.")
-    logger.info(f"📦 Deploy {payload.repository}:{payload.tag} to K8s...")
+
+    if payload.repository != REPOSITORY:
+        logger.warning("Invalid Docker Hub Repository")
+        raise HTTPException(status_code=406, detail="Invalid Docker Hub Repository")
+
+    logger.info(f"📦 Built from {payload.github_repo} commit {payload.github_commit}")
+    logger.info(f"🚀 Deploy {payload.repository}:{payload.tag} K8s...")
 
     # Deploy cicd-demo-service
     try:
