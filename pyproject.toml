@@ -1,0 +1,16 @@
+[project]
+name = "gha-webhook"
+version = "0.1.0"
+description = "Webhook for GitHub Actions"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.116.1",
+    "python-dotenv>=1.1.1",
+    "uvicorn>=0.35.0",
+]
+
+[tool.ruff]
+line-length = 120
+select = ["F", "E", "W", "UP"]
+ignore = ["F401"]
