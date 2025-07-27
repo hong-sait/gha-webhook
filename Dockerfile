@@ -13,13 +13,13 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
   rm kubectl
 
 # Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/bin/" sh
 
 # Copy project files
 COPY . .
 
 # Install Python dependencies with uv
-RUN uv sync
+RUN uv venv --clear && uv sync
 
 # Expose port
 EXPOSE 8642

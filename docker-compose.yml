@@ -1,0 +1,21 @@
+services:
+  gha-webhook:
+    image: hongsait/gha-webhook
+    build: .
+    volumes:
+      - ${KUBECONFIG_DIR}:/root/.kube
+    ports:
+      - "8642:8642"
+    environment:
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET}
+    restart: always
+  ngrok:
+    image: ngrok/ngrok:latest
+    command:
+      - "http"
+      - "--url=firefly-sincere-firstly.ngrok-free.app"
+      - "http://gha-webhook:8642"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - 4040:4040
