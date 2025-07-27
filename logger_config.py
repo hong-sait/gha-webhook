@@ -9,9 +9,10 @@ def setup_logger():
     """
     logging.basicConfig(
         level=logging.INFO,
-        format="{levelname} - {asctime} - {message}",
         style="{",
-        datefmt="%Y-%m-%d %H:%M",
+        format="{levelname} - {message}",
+        # format="{levelname} - {asctime} - {message}",
+        # datefmt="%Y-%m-%d %H:%M",
     )
 
 
@@ -22,5 +23,5 @@ def get_logger(name: str = __name__):
     :param name: Name of the logger (usually __name__)
     :return: logging.Logger
     """
-    setup_logger()  # Ensure config is applied
+    setup_logger()
     return logging.getLogger(name)
